@@ -1,0 +1,86 @@
+{
+    "themes": {
+        "default": {
+            "colors": {
+                "primary": {
+                    "main": "#2B2B2B",
+                    "hover": "#404040",
+                    "text": "white"
+                },
+                "background": {
+                    "main": "#F5F5F5",
+                    "input": "white",
+                    "dropdown": "white"
+                },
+                "validation": {
+                    "success": "#4CAF50",
+                    "error": "#F44336"
+                },
+                "text": {
+                    "primary": "#2B2B2B",
+                    "secondary": "#666666"
+                }
+            }
+        },
+        "dark_cyan": {
+            "colors": {
+                "primary": {
+                    "main": "#006064",
+                    "hover": "#00838F",
+                    "text": "white"
+                },
+                "background": {
+                    "main": "#263238",
+                    "input": "#37474F",
+                    "dropdown": "#37474F"
+                },
+                "validation": {
+                    "success": "#00BCD4",
+                    "error": "#FF5252"
+                },
+                "text": {
+                    "primary": "#E0E0E0",
+                    "secondary": "#B0BEC5"
+                }
+            }
+        }
+    },
+    "fonts": {
+        "regular": {
+            "family": "Arial",
+            "size": 12,
+            "weight": "normal"
+        },
+        "bold": {
+            "family": "Arial",
+            "size": 12,
+            "weight": "bold"
+        }
+    },
+    "components": {
+        "button": {
+            "corner_radius": 8,
+            "border_width": 2,
+            "padding": {
+                "x": 20,
+                "y": 5
+            }
+        },
+        "input": {
+            "corner_radius": 6,
+            "border_width": 2,
+            "padding": {
+                "x": 5,
+                "y": 2
+            }
+        },
+        "dropdown": {
+            "corner_radius": 6,
+            "border_width": 2,
+            "padding": {
+                "x": 5,
+                "y": 2
+            }
+        }
+    }
+} 
