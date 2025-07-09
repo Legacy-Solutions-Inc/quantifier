@@ -76,36 +76,81 @@ class CombinatorManager:
         else:
             df['Original_Lengths'] = df['Lengths'].copy()
             grouping_col = 'Lengths'
-            
+        
         # Group data by diameter
         grouped = df.groupby('Diameter')
         
+        # List of all ID columns to preserve
+        id_columns = [
+            'TagID', 'FloorID', 'ZoneID', 'LocationID',
+            'MemberTypeID', 'RebarTypeID', 'SpecificTagID'
+        ]
+        
+        def id_agg(series):
+            return dict(series.value_counts())
+        
         # Create combinators for each diameter
         for diameter, group_df in grouped:
-            # Group identical lengths and sum their pieces
-            aggregated_df = (group_df.groupby(grouping_col)['Pcs']
-                           .sum()
-                           .reset_index())
+            # Build aggregation dictionary for groupby using the correct syntax for pandas >= 0.25
+            agg_dict = {'Pcs': ('Pcs', 'sum')}
+            for col in id_columns:
+                if col in group_df.columns:
+                    agg_dict[col + '_Map'] = (col, id_agg)
+            
+            aggregated_df = (
+                group_df.groupby(grouping_col)
+                .agg(**agg_dict)
+                .reset_index()
+            )
             
             # Use the original lengths for the combinator
             if apply_rounding:
                 original_lengths = []
                 for rounded_len in aggregated_df[grouping_col]:
-                    # Find the original lengths that correspond to this rounded length
                     orig_lens = group_df[group_df[grouping_col] == rounded_len]['Original_Lengths'].unique()
-                    # Use the maximum original length to ensure sufficient material
                     original_lengths.append(max(orig_lens))
             else:
                 original_lengths = aggregated_df[grouping_col].tolist()
             
+            # Store the ID maps for each length
+            id_maps = {}
+            # Also store a reverse map: for each ID value, which lengths does it belong to
+            id_to_lengths = {col: {} for col in id_columns}
+            for idx, row in aggregated_df.iterrows():
+                length = row[grouping_col]
+                id_maps[length] = {col: row.get(col + '_Map', {}) for col in id_columns if col + '_Map' in row}
+                # Build reverse map
+                for col in id_columns:
+                    id_map = row.get(col + '_Map', {})
+                    for id_val in id_map:
+                        if id_val not in id_to_lengths[col]:
+                            id_to_lengths[col][id_val] = set()
+                        id_to_lengths[col][id_val].add(length)
+            # Convert sets to lists for serialization
+            for col in id_to_lengths:
+                for id_val in id_to_lengths[col]:
+                    id_to_lengths[col][id_val] = list(id_to_lengths[col][id_val])
             config = CombinatorConfig(
                 diameter=diameter,
                 lengths=original_lengths,
                 pcs=aggregated_df['Pcs'].tolist(),
                 targets=group_df['Target'].unique().tolist() if 'Target' in group_df else None,
+                tagID=group_df['TagID'].unique().tolist() if 'TagID' in group_df else None,
+                floorID=group_df['FloorID'].unique().tolist() if 'FloorID' in group_df else None,
+                zoneID=group_df['ZoneID'].unique().tolist() if 'ZoneID' in group_df else None,
+                locationID=group_df['LocationID'].unique().tolist() if 'LocationID' in group_df else None,
+                member_typeID=group_df['MemberTypeID'].unique().tolist() if 'MemberTypeID' in group_df else None,
+                rebar_typeID=group_df['RebarTypeID'].unique().tolist() if 'RebarTypeID' in group_df else None,
+                specific_tagID=group_df['SpecificTagID'].unique().tolist() if 'SpecificTagID' in group_df else None
             )
+            # Attach id_maps and id_to_lengths as attributes for reference
+            config.id_maps = id_maps
+            config.id_to_lengths = id_to_lengths
+
+            print(id_maps)
+            print(id_to_lengths)
             self.combinators[diameter] = Combinator(config)
-            
+        
         # Set current diameter to first one
         if self.combinators:
             self.current_diameter = min(self.combinators.keys())
