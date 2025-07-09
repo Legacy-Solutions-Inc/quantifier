@@ -21,6 +21,7 @@ class CombinatorConfig:
     pcs: List[int] = None
     diameter: float = 0.0
 
+<<<<<<< HEAD
     # tagging fields
     tagID: List[str] = None
     floorID: List[str] = None
@@ -32,6 +33,8 @@ class CombinatorConfig:
 
     id_maps: Optional[dict] = None
 
+=======
+>>>>>>> f8f8959bb77f66fc8df23313919a6b0826552b21
     def __post_init__(self):
         """Set default values for None fields."""
         if self.targets is None:
@@ -67,6 +70,7 @@ class Combinator:
         self.lengths = np.array(config.lengths)
         self.pcs = np.array(config.pcs)
         
+<<<<<<< HEAD
         # added additiona tagging columns
         self.tagID = np.array(config.tagID) if config.tagID else np.array([])
         self.floorID = np.array(config.floorID) if config.floorID else np.array([])
@@ -77,11 +81,16 @@ class Combinator:
         self.specific_tagID = np.array(config.specific_tagID) if config.specific_tagID else np.array([])
         # Ensure all arrays are of the same length
 
+=======
+>>>>>>> f8f8959bb77f66fc8df23313919a6b0826552b21
         # Store original values
         self.original_targets = self.targets.copy()
         self.original_lengths = self.lengths.copy()
         self.original_pcs = self.pcs.copy()
+<<<<<<< HEAD
 
+=======
+>>>>>>> f8f8959bb77f66fc8df23313919a6b0826552b21
         
         # Results storage
         self.results: List[CombinationResult] = []
