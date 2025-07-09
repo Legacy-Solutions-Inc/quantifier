@@ -21,6 +21,17 @@ class CombinatorConfig:
     pcs: List[int] = None
     diameter: float = 0.0
 
+    # tagging fields
+    tagID: List[str] = None
+    floorID: List[str] = None
+    zoneID: List[str] = None
+    locationID: List[str] = None
+    member_typeID: List[str] = None
+    rebar_typeID: List[str] = None
+    specific_tagID: List[str] = None
+
+    id_maps: Optional[dict] = None
+
     def __post_init__(self):
         """Set default values for None fields."""
         if self.targets is None:
@@ -56,10 +67,21 @@ class Combinator:
         self.lengths = np.array(config.lengths)
         self.pcs = np.array(config.pcs)
         
+        # added additiona tagging columns
+        self.tagID = np.array(config.tagID) if config.tagID else np.array([])
+        self.floorID = np.array(config.floorID) if config.floorID else np.array([])
+        self.zoneID = np.array(config.zoneID) if config.zoneID else np.array([])
+        self.locationID = np.array(config.locationID) if config.locationID else np.array([])
+        self.member_typeID = np.array(config.member_typeID) if config.member_typeID else np.array([])
+        self.rebar_typeID = np.array(config.rebar_typeID) if config.rebar_typeID else np.array([])
+        self.specific_tagID = np.array(config.specific_tagID) if config.specific_tagID else np.array([])
+        # Ensure all arrays are of the same length
+
         # Store original values
         self.original_targets = self.targets.copy()
         self.original_lengths = self.lengths.copy()
         self.original_pcs = self.pcs.copy()
+
         
         # Results storage
         self.results: List[CombinationResult] = []

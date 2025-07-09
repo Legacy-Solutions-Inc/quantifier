@@ -122,10 +122,17 @@ class DragDropFrame(ctk.CTkFrame):
                 df = pd.read_excel(file_path)
                 
             # Validate the DataFrame structure
-            required_columns = {'Lengths', 'Pcs', 'Diameter'}
+            required_columns = {'Lengths', 'Pcs', 'Diameter', 
+                                    'TagID', 'FloorID', 'ZoneID', 
+                                    'LocationID', 'MemberTypeID', 
+                                    'RebarTypeID', 'SpecificTagID'}
             if not all(col in df.columns for col in required_columns):
-                raise ValueError("File must contain 'Lengths', 'Pcs', and 'Diameter' columns")
-                
+                raise ValueError(f"File must contain {required_columns} columns")
+            
+            print(df)
+            # Debug: Save the DataFrame to a log file
+            df.to_csv("import_debug_log.csv", index=False)
+
             # Pass the data to the callback
             self.on_file_drop(df)
             
