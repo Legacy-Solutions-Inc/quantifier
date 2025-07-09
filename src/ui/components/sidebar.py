@@ -11,10 +11,6 @@ import pandas as pd
 from src.ui.components.drag_drop import DragDropFrame
 from src.ui.theme_manager import ThemeManager
 
-<<<<<<< HEAD
-=======
-
->>>>>>> f8f8959bb77f66fc8df23313919a6b0826552b21
 class ActionButton(ctk.CTkButton):
     """Custom button with enhanced styling and functionality."""
     
@@ -189,11 +185,7 @@ class Sidebar(ctk.CTkFrame):
             self.button_frame,
             "Target Lengths (comma-separated):",
             row=start_row,
-<<<<<<< HEAD
             default="12",
-=======
-            default="12, 10.5, 9, 7.5",
->>>>>>> f8f8959bb77f66fc8df23313919a6b0826552b21
             validate=lambda x: all(float(v) > 0 for v in x.split(","))
         )
         

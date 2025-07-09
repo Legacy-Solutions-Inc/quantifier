@@ -76,7 +76,6 @@ class CombinatorManager:
         else:
             df['Original_Lengths'] = df['Lengths'].copy()
             grouping_col = 'Lengths'
-<<<<<<< HEAD
         
         # Group data by diameter
         grouped = df.groupby('Diameter')
@@ -103,35 +102,16 @@ class CombinatorManager:
                 .agg(**agg_dict)
                 .reset_index()
             )
-=======
-            
-        # Group data by diameter
-        grouped = df.groupby('Diameter')
-        
-        # Create combinators for each diameter
-        for diameter, group_df in grouped:
-            # Group identical lengths and sum their pieces
-            aggregated_df = (group_df.groupby(grouping_col)['Pcs']
-                           .sum()
-                           .reset_index())
->>>>>>> f8f8959bb77f66fc8df23313919a6b0826552b21
             
             # Use the original lengths for the combinator
             if apply_rounding:
                 original_lengths = []
                 for rounded_len in aggregated_df[grouping_col]:
-<<<<<<< HEAD
                     orig_lens = group_df[group_df[grouping_col] == rounded_len]['Original_Lengths'].unique()
-=======
-                    # Find the original lengths that correspond to this rounded length
-                    orig_lens = group_df[group_df[grouping_col] == rounded_len]['Original_Lengths'].unique()
-                    # Use the maximum original length to ensure sufficient material
->>>>>>> f8f8959bb77f66fc8df23313919a6b0826552b21
                     original_lengths.append(max(orig_lens))
             else:
                 original_lengths = aggregated_df[grouping_col].tolist()
             
-<<<<<<< HEAD
             # Store the ID maps for each length
             id_maps = {}
             # Also store a reverse map: for each ID value, which lengths does it belong to
@@ -150,14 +130,11 @@ class CombinatorManager:
             for col in id_to_lengths:
                 for id_val in id_to_lengths[col]:
                     id_to_lengths[col][id_val] = list(id_to_lengths[col][id_val])
-=======
->>>>>>> f8f8959bb77f66fc8df23313919a6b0826552b21
             config = CombinatorConfig(
                 diameter=diameter,
                 lengths=original_lengths,
                 pcs=aggregated_df['Pcs'].tolist(),
                 targets=group_df['Target'].unique().tolist() if 'Target' in group_df else None,
-<<<<<<< HEAD
                 tagID=group_df['TagID'].unique().tolist() if 'TagID' in group_df else None,
                 floorID=group_df['FloorID'].unique().tolist() if 'FloorID' in group_df else None,
                 zoneID=group_df['ZoneID'].unique().tolist() if 'ZoneID' in group_df else None,
@@ -174,11 +151,6 @@ class CombinatorManager:
             print(id_to_lengths)
             self.combinators[diameter] = Combinator(config)
         
-=======
-            )
-            self.combinators[diameter] = Combinator(config)
-            
->>>>>>> f8f8959bb77f66fc8df23313919a6b0826552b21
         # Set current diameter to first one
         if self.combinators:
             self.current_diameter = min(self.combinators.keys())
