@@ -1,1 +1,1 @@
-web: cd api_server && python simple_main.py
+web: python api_server/simple_main.py
