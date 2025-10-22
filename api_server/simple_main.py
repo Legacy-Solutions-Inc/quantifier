@@ -73,11 +73,29 @@ async def root():
 
 @app.get("/health")
 async def health_check():
-    """Health check endpoint"""
+    """Health check endpoint for Railway"""
     return {
         "status": "healthy", 
         "service": "rsb-combinator-api",
-        "environment": "development"
+        "environment": "production",
+        "port": os.getenv("PORT", 8000),
+        "host": "0.0.0.0"
+    }
+
+@app.get("/")
+async def root():
+    """Root endpoint with API information"""
+    return {
+        "message": "RSB Combinator API Server",
+        "version": "1.0.0",
+        "docs": "/docs",
+        "status": "running",
+        "health": "/health",
+        "environment": {
+            "supabase_configured": "placeholder" not in os.getenv("SUPABASE_URL", ""),
+            "supabase_url": os.getenv("SUPABASE_URL", "Not configured")[:50] + "..." if len(os.getenv("SUPABASE_URL", "")) > 50 else os.getenv("SUPABASE_URL", "Not configured"),
+            "port": os.getenv("PORT", 8000)
+        }
     }
 
 @app.get("/api/test")
@@ -108,15 +126,18 @@ async def calculate_rsb(data: dict):
         raise HTTPException(status_code=500, detail=f"Calculation error: {str(e)}")
 
 if __name__ == "__main__":
+    # Get port from environment variable (Railway provides this)
+    port = int(os.getenv("PORT", 8000))
+    
     print("🌐 Starting RSB Combinator API Server...")
-    print("📚 API Documentation: http://localhost:8000/docs")
-    print("🔍 Health Check: http://localhost:8000/health")
-    print("🧪 Test Endpoint: http://localhost:8000/api/test")
+    print(f"📚 API Documentation: http://0.0.0.0:{port}/docs")
+    print(f"🔍 Health Check: http://0.0.0.0:{port}/health")
+    print(f"🧪 Test Endpoint: http://0.0.0.0:{port}/api/test")
     
     uvicorn.run(
         "simple_main:app",
         host="0.0.0.0",
-        port=8000,
-        reload=True,
+        port=port,
+        reload=False,  # Disable reload in production
         log_level="info"
     )
