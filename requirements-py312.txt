@@ -1,0 +1,31 @@
+# FastAPI and web server dependencies
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+python-multipart>=0.0.6
+
+# Database and authentication
+supabase>=2.0.0
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.0
+
+# Data processing and analysis - Python 3.12 compatible versions
+pandas>=2.1.0
+numpy>=1.26.0  # Use newer numpy that supports Python 3.12
+openpyxl>=3.1.0
+
+# Authentication and security
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.0
+python-dotenv>=1.0.0
+
+# File handling
+Pillow>=10.0.0
+
+# HTTP client
+httpx>=0.25.0
+
+# Development and testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+black>=23.0.0
+flake8>=6.0.0

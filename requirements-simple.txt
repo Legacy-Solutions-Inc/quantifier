@@ -1,0 +1,31 @@
+# Core FastAPI dependencies
+fastapi
+uvicorn[standard]
+python-multipart
+
+# Database
+supabase
+sqlalchemy
+psycopg2-binary
+
+# Data processing
+pandas
+numpy
+openpyxl
+
+# Authentication
+python-jose[cryptography]
+passlib[bcrypt]
+python-dotenv
+
+# File handling
+Pillow
+
+# HTTP client
+httpx
+
+# Development
+pytest
+pytest-asyncio
+black
+flake8
